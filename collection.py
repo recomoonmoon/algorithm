@@ -54,6 +54,60 @@ def heapSort(nums):
         print(f"size: {size} 排序后 {nums}")
         size -= 1
 
+def fast_sort(nums, flag_left, flag_right):
+    if len(nums) <= 1:
+        return nums
+    else:
+        if flag_left >= flag_right:
+            return
+        i = flag_left
+        j = flag_right
+        base = nums[flag_left]
+        while i < j:
+            while nums[j] >= base and i < j:
+                j-=1
+            nums[i] = nums[j]
+            while nums[i] < base and i < j:
+                i+=1
+            nums[j] = nums[i]
+        nums[i] = base
+        fast_sort(nums, flag_left, i-1)
+        fast_sort(nums, i+1, flag_right)
+
+def shellsort(nums=[], n=len(nums)):
+    gap = n
+    while(gap > 1):
+        gap = int(gap/2)
+        i = 0
+        while(i < n - gap):
+            end = i
+            temp = nums[end + gap]
+            while(end >= 0):
+                if(temp < nums[end]):
+                    nums[end + gap] = nums[end]
+                    end -= gap
+                else:
+                    break
+            nums[end + gap] = temp
+            i+=1
+
+def insertsort(nums, n=len(nums)):
+    if n <= 1:
+        return
+    else:
+        print(n)
+        for i in range(1, n):
+            print(f"{i}: ", nums)
+            temp = i - 1
+            numi = nums[i]
+            while temp >= 0:
+                if nums[temp] > numi:
+                    nums[temp + 1] = nums[temp]
+                    temp -= 1
+                else:
+                    break
+            nums[temp + 1] = numi
+
 print(nums)
 heapSort(nums)
 print(nums)
