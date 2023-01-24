@@ -108,6 +108,34 @@ def insertsort(nums, n=len(nums)):
                     break
             nums[temp + 1] = numi
 
+def mergesort(nums, left, right):
+    if left >= right:
+        return
+    else:
+        mid = int((left+right)/2)
+        mergesort(nums, left, mid)
+        mergesort(nums, mid+1, right)
+        pointer_left = left
+        pointer_right = mid + 1
+        ans = []
+        while pointer_left <= mid or pointer_right <= right:
+            if pointer_left > mid:
+                ans.append(nums[pointer_right])
+                pointer_right += 1
+            elif pointer_right > right:
+                ans.append(nums[pointer_left])
+                pointer_left += 1
+            else:
+                if nums[pointer_left] >= nums[pointer_right]:
+                    ans.append(nums[pointer_right])
+                    pointer_right += 1
+                else:
+                    ans.append(nums[pointer_left])
+                    pointer_left += 1
+        for i in range(len(ans)):
+            nums[left+i] = ans[i]
+
+
 print(nums)
-heapSort(nums)
+mergesort(nums, 0, len(nums)-1)
 print(nums)
