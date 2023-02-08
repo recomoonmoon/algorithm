@@ -111,8 +111,43 @@ class Solution:
             #print(dp, "\n")
         return dp[-1]
 
+    def numTrees(self, n: int) -> int:
+        if n <= 1:
+            return 1
+        else:
+            g = [0 for i in range(n + 1)]
+            g[0] = 1
+            g[1] = 1
+            for i in range(2, n+1):
+                for j in range(1, i+1):
+                    g[i] += g[j-1]*g[i-j]
+            return g[n]
 
-days = [1,4,6,7,8,20]
-costs = [2,7,15]
+    def trap(self, height0) -> int:
+        n = len(height0)
+        def getWater(i, left):
+            if i < n - 1:
+                right = max(height0[i+1:])
+                water = min(left, right) - height0[i]
+                if water > 0:
+                    return water
+                else:
+                    return 0
+            else:
+                return 0
+
+        left = 0
+        ans = 0
+
+        for i in range(n):
+            ans += getWater(i, left)
+            left = max(left, height0[i])
+        return ans
+
+
+# days = [1,4,6,7,8,20]
+# costs = [2,7,15]
 s = Solution()
-print(s.mincostTickets(days, costs))
+print(s.trap([4,2,0,3,2,5]))
+
+
