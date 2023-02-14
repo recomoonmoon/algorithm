@@ -1,2 +1,4 @@
-nums = [1, 2]
-print(nums[:0])
+
+a = {1:2}
+print(a.keys())
+print(1 in a.keys())

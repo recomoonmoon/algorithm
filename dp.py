@@ -1,5 +1,5 @@
 import random
-
+from collections import defaultdict
 #Question 1
 # 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
 # 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
@@ -123,7 +123,7 @@ class Solution:
                     g[i] += g[j-1]*g[i-j]
             return g[n]
 
-    def trap(self, height0) -> int:
+    def trap1(self, height0) -> int:
         n = len(height0)
         def getWater(i, left):
             if i < n - 1:
@@ -143,11 +143,72 @@ class Solution:
             ans += getWater(i, left)
             left = max(left, height0[i])
         return ans
+    def trap2(self, height) -> int:
+        n = len(height)
+        dp = [0 for i in range(n)]
+        left = height[0]
+        for i in range(0, n, 1):
+            dp[i] = max(left - height[i], 0)
+            left = max(left, height[i])
+        right = height[n-1]
+        for i in range(n-1, -1, -1):
+            dp[i] = min(max(right - height[i], 0), dp[i])
+            right = max(right, height[i])
+        return sum(dp)
 
+    def superEggDrop(self, k: int, n: int) -> int:
+        def cell(n):
+            if int(n/2) == n/2:
+                return int(n/2)
+            else:
+                return int(n/2) + 1
+        if n == 1:
+            return 0
+        elif n == 2:
+            return 1
+        elif k == 1:
+            return n
+        else:
+            return self.superEggDrop(k-1, cell(n)-1) + 1
+    def subarraySum(self, nums, k: int) -> int:
+        sm = 0
+        mp = defaultdict(int)
+        mp[0] = 1
+        res = 0
+        for i in nums:
+            sm += i
+            print(f"sum: {sm}\nres: {res}\n")
+            res += mp[sm - k]
+            mp[sm] += 1
+        return res
+
+    def maximalSquare(self, matrix) -> int:
+        n1 = len(matrix)
+        n2 = len(matrix[0])
+        dp = [[0]*n2 for i in range(n1)]
+
+        for i in range(n2):
+            if matrix[0][i] == "1":
+                dp[0][i] = 1
+
+
+        for i in range(n1):
+            if matrix[i][0] == "1":
+                dp[i][0] = 1
+        if min(n1, n2) >= 2:
+            for i in range(1, n1):
+                for j in range(1, n2):
+
+                    if matrix[i][j] == "1":
+                        dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1
+                    else:
+                        dp[i][j] = 0
+
+        return max(max(i) for i in dp)**2
 
 # days = [1,4,6,7,8,20]
 # costs = [2,7,15]
 s = Solution()
-print(s.trap([4,2,0,3,2,5]))
+print(s.maximalSquare([["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]))
 
 
