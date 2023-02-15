@@ -206,9 +206,66 @@ class Solution:
 
         return max(max(i) for i in dp)**2
 
+    def maxProfit1(self, k: int, prices) -> int:
+        n = len(prices)
+        preprice = prices[0]
+        alt = preprice
+        trades = []
+        for i in range(1, n):
+            if prices[i] >= alt:
+                alt = prices[i]
+            else:
+                trades.append(alt - preprice)
+                preprice = prices[i]
+                alt = preprice
+        trades.append(alt - preprice)
+        print(trades)
+        trades = [i for i in trades if i > 0]
+        if len(trades) <= k:
+            return sum(trades)
+        else:
+            trades.sort()
+            trades.reverse()
+            return sum(trades[:k])
+
+    def maxProfit(self, k: int, prices) -> int:
+        if not prices:
+            return 0
+
+        n = len(prices)
+        k = min(k, n // 2)
+        buy = [[0] * (k + 1) for _ in range(n)]
+        sell = [[0] * (k + 1) for _ in range(n)]
+
+        buy[0][0], sell[0][0] = -prices[0], 0
+        for i in range(1, k + 1):
+            buy[0][i] = sell[0][i] = float("-inf")
+
+        for i in range(1, n):
+            buy[i][0] = max(buy[i - 1][0], sell[i - 1][0] - prices[i])
+            for j in range(1, k + 1):
+                buy[i][j] = max(buy[i - 1][j], sell[i - 1][j] - prices[i])
+                sell[i][j] = max(sell[i - 1][j], buy[i - 1][j - 1] + prices[i]);
+
+        return max(sell[n - 1])
+
+    def maxAreaOfIsland(self, grid) -> int:
+        pass
+
+    def containsDuplicate(self, nums) -> bool:
+        haxi = defaultdict(int)
+        for i in nums:
+            if haxi[i] == 0:
+                haxi[i] = 1
+            else:
+                return False
+        return True
+
+
+
 # days = [1,4,6,7,8,20]
 # costs = [2,7,15]
 s = Solution()
-print(s.maximalSquare([["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]))
+print(s.maxProfit(2, [3,2,6,5,0,3]))
 
 
