@@ -1,4 +1,4 @@
 
-a = {1:2}
-print(a.keys())
-print(1 in a.keys())
+a = [1, 2]
+b = [2, 3]
+print(a+b)

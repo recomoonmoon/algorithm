@@ -11,7 +11,7 @@ from collections import defaultdict
 
 #在本数组上操作，避免了内存开销
 nums = [random.randint(1, 100) for i in range(10)]
-def maxProfit(nums=[]):
+def maxProfit(nums):
     n = len(nums)
     if n == 0:
         return 0
@@ -25,7 +25,7 @@ def maxProfit(nums=[]):
             nums[i] = max(nums[i-1], nums[i-2] + nums[i])
             i+=1
         return nums[-1]
-print(f"Q1: nums = {nums} \nmax profit = {maxProfit(nums)}")
+# print(f"Q1: nums = {nums} \nmax profit = {maxProfit(nums)}")
 #Question 2
 # 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
 # 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
@@ -79,10 +79,10 @@ def lengthOfLIS(nums) -> int:
                      dp[i] = max(dp[j] + 1, dp[i])
          return max(dp)
 
-
-nums = [1,3,6,7,9,4,10,5,6]
-print(nums)
-print(lengthOfLIS(nums))
+#
+# nums = [1,3,6,7,9,4,10,5,6]
+# print(nums)
+# print(lengthOfLIS(nums))
 
 #Question 4
 # 在一个火车旅行很受欢迎的国度，你提前一年计划了一些火车旅行。在接下来的一年里，你要旅行的日子将以一个名为 days 的数组给出。每一项是一个从 1 到 365 的整数。
@@ -91,7 +91,7 @@ print(lengthOfLIS(nums))
 # 一张 为期七天 的通行证售价为 costs[1] 美元；
 # 一张 为期三十天 的通行证售价为 costs[2] 美元。
 # 通行证允许数天无限制的旅行。 例如，如果我们在第 2 天获得一张 为期 7 天 的通行证，那么我们可以连着旅行 7 天：第 2 天、第 3 天、第 4 天、第 5 天、第 6 天、第 7 天和第 8 天。
-print("Q4")
+# print("Q4")
 class Solution:
     def mincostTickets(self, days, costs) -> int:
         dp = [0 for i in range(366)]
@@ -261,11 +261,41 @@ class Solution:
                 return False
         return True
 
-
+    def maxSubArray(self, nums) -> int:
+        dp, presum = nums[0], max(0, nums[0])
+        for i in nums[1:]:
+            dp = max(presum + i, dp)
+            presum = max(0, presum + i)
+        return dp
 
 # days = [1,4,6,7,8,20]
 # costs = [2,7,15]
-s = Solution()
-print(s.maxProfit(2, [3,2,6,5,0,3]))
+# s = Solution()
+# print(s.maxSubArray([-2,1,-3,4,-1,2,1,-5,4]))
+# print()
+
+def twosum(nums, target):
+    haxi = defaultdict(int)
+    for i in range(len(nums)):
+
+        n = nums[i]
+        if haxi[target - n] != 0:
+            return [haxi[target - n] - 1, i]
+        haxi[n] = i + 1
+        print(f"i:{i}  nums[i]: {n}  haxi[n]{haxi[n]}")
 
 
+# print(twosum([3,2,4], 6))
+def merge1(nums1, nums2):
+    h1 = defaultdict(int)
+    h2 = defaultdict(int)
+    for i in nums1:
+        h1[i] += 1
+    for i in nums2:
+        h2[i] += 1
+    ans = []
+    for i in set(nums2):
+        ans+=[i]*min(h1[i], h2[i])
+    return ans
+
+print(merge1(nums1=[4,9,5], nums2=[9,4,9,8,4]))
